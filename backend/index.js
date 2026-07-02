@@ -2,6 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import leadRoutes from "./routes/leadRoutes.js";
+import contextRoutes from "./routes/contextRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +23,9 @@ mongoose.connect(process.env.MONGO_URI)
 app.get('/', (req, res) => {
     res.send('Welcome to the backend of Pipeline Pilot!');
 });
+
+app.use("/api/context", contextRoutes);
+app.use("/api/leads", leadRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${PORT}`);
