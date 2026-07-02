@@ -78,15 +78,23 @@ router.post("/process/:id", async (req, res) => {
 
 // 4. Update lead status manually (e.g., when drag-and-dropping across Kanban columns)
 router.patch("/:id/status", async (req, res) => {
-  const { status } = req.body;
   try {
+    const { id } = req.params; // <-- ADDED THIS LINE TO FIX THE BUG
+    const { status } = req.body;
+
     const updatedLead = await Lead.findByIdAndUpdate(
       id,
       { status },
-      { new: true },
+      { returnDocument: "after" },
     );
+
+    if (!updatedLead) {
+      return res.status(404).json({ error: "Lead not found." });
+    }
+
     return res.json(updatedLead);
   } catch (error) {
+    console.error("Status update error:", error);
     return res.status(500).json({ error: "Failed to update stage status." });
   }
 });
