@@ -315,13 +315,16 @@ export default function App() {
                         )}
 
                         {lead.status === "Drafted" && (
-                          <div className="space-y-1.5 mt-2 pt-2 border-t border-slate-100">
-                            <div className="text-[11px] font-semibold text-slate-500 uppercase">
-                              Generated Pitch Preview:
+                          <div className="space-y-3 mt-3 pt-3 border-t border-slate-100">
+                            <div className="text-[11px] font-bold text-indigo-600 uppercase tracking-wider">
+                              Generated Pitch:
                             </div>
-                            <p className="text-[11px] text-slate-600 line-clamp-3 bg-slate-50 p-1.5 rounded italic">
+
+                            {/* Scrollable, styled container for the email content */}
+                            <div className="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-lg border border-slate-200 max-h-48 overflow-y-auto whitespace-pre-line leading-relaxed shadow-inner">
                               {lead.generatedPitch}
-                            </p>
+                            </div>
+
                             <button
                               onClick={async () => {
                                 await fetch(
@@ -336,10 +339,10 @@ export default function App() {
                                 );
                                 fetchLeads();
                               }}
-                              className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold py-1 rounded text-xs flex items-center justify-center gap-1 transition-all"
+                              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all cursor-pointer"
                             >
                               Approve & Mark Sent{" "}
-                              <CheckCircle2 className="h-3 w-3" />
+                              <CheckCircle2 className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         )}
