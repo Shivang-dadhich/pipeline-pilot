@@ -99,4 +99,33 @@ router.patch("/:id/status", async (req, res) => {
   }
 });
 
+
+import { runAutonomousAgent } from "../services/agentEngine.js";
+
+// 3. THE AGENT TRIGGER: Executes autonomous memory-driven tool loop
+router.post('/process/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const lead = await Lead.findById(id);
+    if (!lead) return res.status(404).json({ error: 'Lead not found.' });
+
+    const userContext = await UserContext.findOne();
+    if (!userContext) {
+      return res.status(400).json({ error: 'Please set up your Product Context first!' });
+    }
+
+    lead.status = 'Researched';
+    await lead.save();
+
+    console.log(`🚀 Starting Autonomous Agent Engine for Lead: ${lead.companyName}`);
+    const completedLead = await runAutonomousAgent(lead._id, userContext);
+
+    return res.json({ message: 'Agent loop execution finalized!', lead: completedLead });
+  } catch (error) {
+    console.error('Agent processing crash:', error);
+    return res.status(500).json({ error: error.message || 'Agent pipeline failure.' });
+  }
+});
+
+
 export default router;
